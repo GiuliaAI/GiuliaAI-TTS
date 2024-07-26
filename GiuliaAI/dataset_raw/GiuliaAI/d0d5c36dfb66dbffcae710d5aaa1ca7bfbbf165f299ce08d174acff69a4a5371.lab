@@ -1,0 +1,1 @@
+Prova con `sed -i 's/oldtext/newtext/g' filename`.

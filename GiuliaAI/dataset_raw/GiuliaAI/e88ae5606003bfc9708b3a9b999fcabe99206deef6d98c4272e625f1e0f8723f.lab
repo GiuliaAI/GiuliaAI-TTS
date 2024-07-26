@@ -1,0 +1,1 @@
+Controlla il file `/etc/locale.conf` e impostalo su `LANG=enUS.UTF-8`.

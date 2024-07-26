@@ -1,0 +1,1 @@
+Proviamo con il comando `localectl set-locale LANG=enUS.UTF-8`.

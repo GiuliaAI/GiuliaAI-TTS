@@ -1,0 +1,1 @@
+Prova `sudo nano /etc/locale.conf` e cambia `LANG` in `enUS.UTF-8`.

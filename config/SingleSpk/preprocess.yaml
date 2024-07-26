@@ -1,0 +1,30 @@
+dataset: "LJSpeech"
+
+path:
+  corpus_path: "../datasets"
+  lexicon_path: "lexicon/librispeech-lexicon.txt"
+  raw_path: "../predata"
+  preprocessed_path: "./preprocessed_data/LJSpeech"
+
+preprocessing:
+  val_size: 512
+  text:
+    text_cleaners: ["english_cleaners2"]
+    language: "it"
+  audio:
+    sampling_rate: 44100
+    max_wav_value: 32768.0
+  stft:
+    filter_length: 2048
+    hop_length: 512
+    win_length: 2048
+  mel:
+    n_mel_channels: 88
+    mel_fmin: 00
+    mel_fmax: 11025 # please set to 8000 for HiFi-GAN vocoder, set to null for MelGAN vocoder
+  pitch:
+    feature: "frame_level" # support 'phoneme_level' or 'frame_level'
+    normalization: True
+  energy:
+    feature: "frame_level" # support 'phoneme_level' or 'frame_level'
+    normalization: True

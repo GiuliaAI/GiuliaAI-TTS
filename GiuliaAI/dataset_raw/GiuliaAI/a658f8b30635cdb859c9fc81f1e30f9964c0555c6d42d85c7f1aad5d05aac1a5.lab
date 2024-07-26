@@ -1,0 +1,1 @@
+Apri il terminale e usa `sudo mount -t vboxsf nomecartellacondivisa /mnt`.

@@ -1,0 +1,1 @@
+Prova con `sed -i 's/KOR/ENG/g' /etc/sysconfig/i18n`.

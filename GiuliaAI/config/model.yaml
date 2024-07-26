@@ -50,8 +50,8 @@ variance_embedding:
 #   attn_head: 4
 
 multi_speaker: False
-max_seq_len: 1000
+max_seq_len: 1200
 
 vocoder:
   model: "HiFi-GAN" # support 'HiFi-GAN', 'MelGAN', 'iSTFTNet'
-  speaker: "LJSpeech" # support  'LJSpeech', 'universal'
+  speaker: "universal" # support  'LJSpeech', 'universal'

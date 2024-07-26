@@ -1,7 +1,7 @@
 path:
-  ckpt_path: "./GiuliaAI/model/v1/output/ckpt/GiuliaAI-24-07-26"
-  log_path: "./GiuliaAI/model/v1/output/log/GiuliaAI-24-07-26"
-  result_path: "./GiuliaAI/model/v1/output/result/GiuliaAI-24-07-26"
+  ckpt_path: "./GiuliaAI/model/v1/24-07-26/output/ckpt/"
+  log_path: "./GiuliaAI/model/v1/24-07-26/output/log/"
+  result_path: "./GiuliaAI/model/v1/24-07-26/output/result/"
 optimizer:
   batch_size: 6
   betas: [0.9, 0.98]
@@ -19,7 +19,7 @@ optimizer:
 step:
   total_step: 900000
   log_step: 100
-  synth_step: 100
+  synth_step: 500
   val_step: 10000
-  save_step: 100
+  save_step: 1500
 

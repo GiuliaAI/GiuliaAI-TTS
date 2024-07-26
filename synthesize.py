@@ -113,105 +113,42 @@ def synthesize(
 
 
 if __name__ == "__main__":
+    class Args:
+        restore_step = 10500
+        text = "Ciaaoooo Sono GiuliaAI Come va?"
+        speaker_id = 0
+        preprocess_config = "./GiuliaAI/config/preprocess.yaml"
+        model_config = "./GiuliaAI/config/model.yaml"
+        train_config = "./GiuliaAI/config/train.yaml"
+        pitch_control = 1.0
+        energy_control = 1.0
+        duration_control = 1.0
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--restore_step", type=int, required=True)
-    parser.add_argument(
-        "--mode",
-        type=str,
-        choices=["batch", "single"],
-        required=True,
-        help="Synthesize a whole dataset or a single sentence",
-    )
-    parser.add_argument(
-        "--source",
-        type=str,
-        default=None,
-        help="path to a source file with format like train.txt and val.txt, for batch mode only",
-    )
-    parser.add_argument(
-        "--text",
-        type=str,
-        default=None,
-        help="raw text to synthesize, for single-sentence mode only",
-    )
-    parser.add_argument(
-        "--speaker_id",
-        type=int,
-        default=0,
-        help="speaker ID for multi-speaker synthesis, for single-sentence mode only",
-    )
-    parser.add_argument(
-        "-p",
-        "--preprocess_config",
-        type=str,
-        required=True,
-        help="path to preprocess.yaml",
-    )
-    parser.add_argument(
-        "-m", "--model_config", type=str, required=True, help="path to model.yaml"
-    )
-    parser.add_argument(
-        "-t", "--train_config", type=str, required=True, help="path to train.yaml"
-    )
-    parser.add_argument(
-        "--pitch_control",
-        type=float,
-        default=1.0,
-        help="control the pitch of the whole utterance, larger value for higher pitch",
-    )
-    parser.add_argument(
-        "--energy_control",
-        type=float,
-        default=1.0,
-        help="control the energy of the whole utterance, larger value for larger volume",
-    )
-    parser.add_argument(
-        "--duration_control",
-        type=float,
-        default=1.0,
-        help="control the speed of the whole utterance, larger value for slower speaking rate",
-    )
-    args = parser.parse_args()
-
-    # Check source texts
-    if args.mode == "batch":
-        assert args.source is not None and args.text is None
-    if args.mode == "single":
-        assert args.source is None and args.text is not None
+    args = Args()
 
     # Read Config
-    preprocess_config = yaml.load(
-        open(args.preprocess_config, "r"), Loader=yaml.FullLoader
-    )
+    preprocess_config = yaml.load(open(args.preprocess_config, "r"), Loader=yaml.FullLoader)
     model_config = yaml.load(open(args.model_config, "r"), Loader=yaml.FullLoader)
     train_config = yaml.load(open(args.train_config, "r"), Loader=yaml.FullLoader)
     configs = (preprocess_config, model_config, train_config)
 
     # Get model
+    device = 'cuda'  # Specifica il dispositivo
     model = get_model(args, configs, device, train=False)
 
     # Load vocoder
     vocoder = get_vocoder(model_config, device)
 
-    # Preprocess texts
-    if args.mode == "batch":
-        # Get dataset
-        dataset = TextDataset(args.source, preprocess_config)
-        batchs = DataLoader(
-            dataset,
-            batch_size=8,
-            collate_fn=dataset.collate_fn,
-        )
-    if args.mode == "single":
-        ids = raw_texts = [args.text[:100]]
-        speakers = np.array([args.speaker_id])
-        if preprocess_config["preprocessing"]["text"]["language"] == "en":
-            texts = np.array([preprocess_english(args.text, preprocess_config)])
-        elif preprocess_config["preprocessing"]["text"]["language"] == "zh":
-            texts = np.array([preprocess_mandarin(args.text, preprocess_config)])
-        text_lens = np.array([len(texts[0])])
-        batchs = [(ids, raw_texts, speakers, texts, text_lens, max(text_lens))]
+
+
+    ids = raw_texts = [args.text[:100]]
+    speakers = np.array([args.speaker_id])
+    if preprocess_config["preprocessing"]["text"]["language"] == "en":
+        texts = np.array([preprocess_english(args.text, preprocess_config)])
+    if preprocess_config["preprocessing"]["text"]["language"] == "it":
+        texts = np.array([preprocess_english(args.text, preprocess_config)])
+    text_lens = np.array([len(texts[0])])
+    batchs = [(ids, raw_texts, speakers, texts, text_lens, max(text_lens))]
 
     control_values = args.pitch_control, args.energy_control, args.duration_control
 

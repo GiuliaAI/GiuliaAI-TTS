@@ -204,8 +204,9 @@ def synth_samples(
     preprocess_config, path, 
     do_plot_spectrogram=True, 
 ):
-
+    
     basenames = targets[0]
+    """
     for i in range(len(predictions[0])):
         basename = basenames[i]
         src_len = predictions[8][i].item()
@@ -242,7 +243,7 @@ def synth_samples(
         
         plt.savefig(os.path.join(path, "{}.png".format(basename)))
         plt.close()
-
+    """
     from .model import vocoder_infer
 
     mel_predictions = predictions[1].transpose(1, 2)

@@ -61,7 +61,7 @@ def main(args, configs):
         load_pretrained_weights(model, args.pretrained)
 
 
-    #model = nn.DataParallel(model)
+    model = nn.DataParallel(model)
     num_param = get_param_num(model)
     Loss = FastSpeech3Loss(preprocess_config, model_config, train_config).to(device)
     print("Number of FastSpeech2 Parameters:", num_param)
@@ -207,7 +207,7 @@ def main(args, configs):
                 if step % save_step == 0:
                     torch.save(
                         {
-                            "model": model.state_dict(), # if n gpu: model.module.state_dict(),
+                            "model": model.module.state_dict(),
                             "optimizer": optimizer.state_dict(),
                         },
                         os.path.join(

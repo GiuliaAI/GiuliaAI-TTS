@@ -196,7 +196,14 @@ def synth_one_sample(targets, predictions, vocoder, model_config, preprocess_con
     return fig, wav_reconstruction, wav_prediction, basename, attn_soft
 
 
-def synth_samples(targets, predictions, vocoder, model_config, preprocess_config, path):
+def legalize_filename(filename: str):
+    return ''.join([x if x.isalnum() else '' for x in filename])[:30]
+
+def synth_samples(
+    targets, predictions, vocoder, model_config, 
+    preprocess_config, path, 
+    do_plot_spectrogram=True, 
+):
 
     basenames = targets[0]
     for i in range(len(predictions[0])):
@@ -222,13 +229,17 @@ def synth_samples(targets, predictions, vocoder, model_config, preprocess_config
             stats = json.load(f)
             stats = stats["pitch"] + stats["energy"][:2]
 
-        fig = plot_mel(
-            [
-                (mel_prediction.cpu().numpy(), pitch, energy),
-            ],
-            stats,
-            ["Synthetized Spectrogram"],
-        )
+        if do_plot_spectrogram:
+            fig = plot_mel(
+                [
+                    (mel_prediction.cpu().numpy(), pitch, energy),
+                ],
+                stats,
+                ["Synthetized Spectrogram"],
+            )
+            plt.savefig(os.path.join(path, "{}.png".format(legalize_filename(basename))))
+            plt.close()
+        
         plt.savefig(os.path.join(path, "{}.png".format(basename)))
         plt.close()
 
@@ -242,7 +253,8 @@ def synth_samples(targets, predictions, vocoder, model_config, preprocess_config
 
     sampling_rate = preprocess_config["preprocessing"]["audio"]["sampling_rate"]
     for wav, basename in zip(wav_predictions, basenames):
-        wavfile.write(os.path.join(path, "{}.wav".format(basename)), sampling_rate, wav)
+        wavfile.write(os.path.join(
+            path, "{}.wav".format(legalize_filename(basename))), sampling_rate, wav)
 
 
 def plot_mel(data, stats, titles):

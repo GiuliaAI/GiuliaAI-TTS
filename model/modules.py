@@ -589,7 +589,7 @@ class VarianceAdaptor(nn.Module):
             x = x + pitch_embedding
         if self.energy_feature_level == "phoneme_level":
             energy_prediction, energy_embedding = self.get_energy_embedding(
-                x, energy_target, src_mask, p_control, dur_hidden, x_mask
+                x, energy_target, src_mask, e_control, dur_hidden, x_mask
             )
             x = x + energy_embedding
 
@@ -611,7 +611,7 @@ class VarianceAdaptor(nn.Module):
             x = x + pitch_embedding
         if self.energy_feature_level == "frame_level":
             energy_prediction, energy_embedding = self.get_energy_embedding(
-                x, energy_target, mel_mask, p_control, dur_hidden, x_mask
+                x, energy_target, mel_mask, e_control, dur_hidden, x_mask
             )
             x = x + energy_embedding
 

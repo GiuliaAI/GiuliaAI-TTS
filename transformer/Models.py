@@ -103,7 +103,9 @@ class Encoder(nn.Module):
             )
             if return_attns:
                 enc_slf_attn_list += [enc_slf_attn]
-
+                
+        if return_attns:
+            return enc_output, enc_slf_attn_list
         return enc_output
 
 
@@ -174,5 +176,8 @@ class Decoder(nn.Module):
             )
             if return_attns:
                 dec_slf_attn_list += [dec_slf_attn]
-
+                
+        if return_attns:
+            return dec_output, mask, dec_slf_attn_list
+        
         return dec_output, mask
